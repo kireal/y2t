@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "y2t"
+version = "0.1.0"
+description = "YouTube Transcript Extractor - A tool to extract video transcripts"
+authors = ["User"]
+readme = "README.md"
+packages = [{ include = "y2t" }]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.14"
+youtube-transcript-api = "^0.6.3"
+pyperclip = "^1.8.2"
+
+[tool.poetry.scripts]
+y2t = "y2t:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
