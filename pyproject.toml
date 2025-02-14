@@ -13,7 +13,7 @@ pyperclip = "^1.8.2"
 requests = "^2.31.0"
 
 [tool.poetry.scripts]
-y2t = "y2t:main"
+y2t = "y2t.cli:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
