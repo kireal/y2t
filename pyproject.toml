@@ -10,9 +10,21 @@ packages = [{ include = "y2t" }]
 python = ">=3.8,<3.14"
 youtube-transcript-api = "^0.6.3"
 pyperclip = "^1.8.2"
+requests = "^2.31.0"
 
 [tool.poetry.scripts]
 y2t = "y2t:main"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+pytest-mock = "^3.14.0"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
 
 [build-system]
 requires = ["poetry-core"]
