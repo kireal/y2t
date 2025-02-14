@@ -7,13 +7,13 @@ readme = "README.md"
 packages = [{ include = "y2t" }]
 
 [tool.poetry.dependencies]
-python = ">=3.8,<3.14"
-youtube-transcript-api = "^0.6.3"
+python = "^3.8"
+youtube-transcript-api = "^0.6.1"
 pyperclip = "^1.8.2"
 requests = "^2.31.0"
 
 [tool.poetry.scripts]
-y2t = "y2t.cli:main"
+y2t = "y2t:main"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
