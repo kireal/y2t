@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 
 import argparse
-import re
 import os
+import re
+import tempfile
 from typing import Optional, Tuple
-from youtube_transcript_api import YouTubeTranscriptApi
-from youtube_transcript_api.formatters import TextFormatter
+
 import pyperclip
 import requests
+from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.formatters import TextFormatter
 
 
 def clean_filename(title: str) -> str:
@@ -51,6 +53,34 @@ def extract_video_id(url: str) -> str:
     raise ValueError("Invalid YouTube URL")
 
 
+def transcribe_with_whisper(video_id: str) -> str:
+    """Download audio and transcribe it using Whisper."""
+    from yt_dlp import YoutubeDL
+    import whisper
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpl = os.path.join(tmpdir, "%(id)s.%(ext)s")
+        ydl_opts = {
+            "outtmpl": tmpl,
+            "format": "bestaudio/best",
+            "quiet": True,
+            "postprocessors": [
+                {
+                    "key": "FFmpegExtractAudio",
+                    "preferredcodec": "mp3",
+                    "preferredquality": "192",
+                }
+            ],
+        }
+        with YoutubeDL(ydl_opts) as ydl:
+            ydl.download([f"https://www.youtube.com/watch?v={video_id}"])
+
+        mp3_path = os.path.join(tmpdir, f"{video_id}.mp3")
+        model = whisper.load_model("base")
+        result = model.transcribe(mp3_path)
+        return result["text"].strip()
+
+
 def get_transcript(
     video_id: str,
     output_file: Optional[str] = None,
@@ -72,7 +102,13 @@ def get_transcript(
         formatter = TextFormatter()
 
         formatted_transcript = formatter.format_transcript(transcript.fetch())
+    except Exception as e:
+        print(
+            f"Failed to fetch transcript via API: {e}\nFalling back to Whisper..."
+        )
+        formatted_transcript = transcribe_with_whisper(video_id)
 
+    try:
         if output_dir:
             # Get video title and create filename
             _, filename = get_video_info(video_id)

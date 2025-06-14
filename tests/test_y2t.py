@@ -1,4 +1,5 @@
 import pytest
+import y2t
 from y2t import extract_video_id, get_transcript, clean_filename, get_video_info
 from youtube_transcript_api import YouTubeTranscriptApi, TranscriptsDisabled
 from youtube_transcript_api.formatters import TextFormatter
@@ -153,10 +154,10 @@ def test_get_transcript_no_captions(mocker):
         "list_transcripts",
         side_effect=TranscriptsDisabled("Transcripts are disabled for this video"),
     )
+    mocker.patch("y2t.transcribe_with_whisper", return_value="fallback text")
 
-    with pytest.raises(SystemExit) as exc_info:
-        get_transcript("jNQXAC9IVRw")
-    assert exc_info.value.code == 1
+    get_transcript("jNQXAC9IVRw")
+    y2t.transcribe_with_whisper.assert_called_once_with("jNQXAC9IVRw")
 
 
 if __name__ == "__main__":

@@ -34,6 +34,13 @@ Then reload your shell configuration:
 source ~/.bashrc  # or source ~/.zshrc for zsh users
 ```
 
+To enable automatic fallback transcription with [Whisper](https://github.com/openai/whisper),
+install the optional dependencies:
+
+```bash
+pip install yt-dlp openai-whisper
+```
+
 ### 2. Alfred Workflow Integration (macOS)
 
 For quick access to transcripts directly from Alfred:
@@ -123,6 +130,7 @@ The tool supports various YouTube URL formats:
 - Handles various YouTube URL formats
 - Uses TextFormatter for clean transcript output
 - Alfred workflow integration for quick access (macOS)
+- Falls back to Whisper-based transcription when captions are unavailable
 
 ## Testing
 
