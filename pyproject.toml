@@ -12,7 +12,10 @@ youtube-transcript-api = "^0.6.1"
 pyperclip = "^1.8.2"
 requests = "^2.31.0"
 yt-dlp = "^2024.4.9"
-openai-whisper = "^2024.9.30"
+# Pinning `openai-whisper` to a specific future-dated release caused
+# installation failures because Poetry was unable to resolve that version from
+# PyPI.  Instead rely on the latest available release.
+openai-whisper = "*"
 
 [tool.poetry.scripts]
 y2t = "y2t:main"
